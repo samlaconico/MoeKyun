@@ -1,30 +1,44 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { Credentials } from "@/utils/types";
-import useSignIn from "@/firebase/useSignIn";
 import { auth } from "@/firebase/config";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 export default function SignIn() {
+  //router hook
+  const router = useRouter();
+
+  //store user credentials fields in state
   const [credentials, setCredentials] = useState<Credentials>({
-    email: "asdkljajklsd@lakjsd.com",
-    password: "jashfkljhasdLHJLASHJD",
+    email: "",
+    password: "",
   });
 
-  const [signIn, user, loading, error] = useSignIn(auth);
+  //firebase-hook to signin user with firebase auth
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
 
+  //handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     error
       ? console.log("Error:", error)
       : console.log("Successful Registration");
     try {
-      const res = await signIn(credentials);
+      const res = await signInWithEmailAndPassword(
+        credentials.email,
+        credentials.password,
+      );
 
       if (res == undefined) {
+        //move to sign in page
+        router.push("/");
       } else {
         setCredentials({ email: "", password: "" });
+
+        //refresh page
+        router.refresh();
       }
     } catch (e) {
       console.log(e);
@@ -33,16 +47,9 @@ export default function SignIn() {
 
   return (
     <div className="font-fira-sans flex h-screen flex-col justify-center">
-      <button
-        onClick={() => {
-          signOut(auth);
-        }}
-      >
-        LOGOUT
-      </button>
       <h1 className="text-center text-4xl">Sign in</h1>
       <h2>{error?.message}</h2>
-      <h2>{auth.currentUser?.email}</h2>
+      <h2>{user?.user.email}</h2>
       <form
         className="mx-auto flex flex-col space-y-3 py-2"
         onSubmit={(e) => {

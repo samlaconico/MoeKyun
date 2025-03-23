@@ -2,30 +2,40 @@
 
 import { FormEvent, useState } from "react";
 import { Credentials } from "@/utils/types";
-import useRegister from "@/firebase/useRegister";
 import { auth } from "@/firebase/config";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import Router from "next/router";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
+  //router hook
+  const router = useRouter();
+
+  //store user credentials fields in state
   const [credentials, setCredentials] = useState<Credentials>({
-    email: "asdkljajklsd@lakjsd.com",
-    password: "jashfkljhasdLHJLASHJD",
+    email: "",
+    password: "",
   });
 
-  const [register, user, loading, error] = useRegister(auth);
+  //firebase-hook to create user with firebase auth
+  const [register, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
 
+  //handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     error
       ? console.log("Error:", error)
       : console.log("Successful Registration");
     try {
-      const res = await register(credentials);
+      const res = await register(credentials.email, credentials.password);
 
       if (res == undefined) {
+        //move to sign in page
+        router.push("/sign-in");
       } else {
+        //if registration fails
         setCredentials({ email: "", password: "" });
+        router.refresh();
       }
 
       console.log("User Registered: ", res);
@@ -38,6 +48,7 @@ export default function Register() {
     <div className="font-fira-sans flex h-screen flex-col justify-center text-center">
       <h1 className="text-center text-4xl">Register</h1>
       <h2>{error?.message}</h2>
+      <button onClick={() => {}}>CLICK</button>
       <form
         className="mx-auto flex flex-col space-y-3 py-2"
         onSubmit={(e) => {
