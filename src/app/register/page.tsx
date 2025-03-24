@@ -2,12 +2,12 @@
 
 import { FormEvent, useState } from "react";
 import { Credentials } from "@/utils/types";
-import { auth } from "@/firebase/config";
+import { auth, db } from "@/firebase/config";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
-  //router hook
   const router = useRouter();
 
   //store user credentials fields in state
@@ -17,25 +17,25 @@ export default function Register() {
   });
 
   //firebase-hook to create user with firebase auth
-  const [register, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [register, , , error] = useCreateUserWithEmailAndPassword(auth);
 
   //handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    error
-      ? console.log("Error:", error)
-      : console.log("Successful Registration");
+
     try {
+      //register user
       const res = await register(credentials.email, credentials.password);
 
-      if (res == undefined) {
-        //move to sign in page
-        router.push("/sign-in");
-      } else {
-        //if registration fails
-        setCredentials({ email: "", password: "" });
-        router.refresh();
+      //add user email to unique document on firestore
+      await addDoc(collection(db, "userCollection"), {
+        email: credentials.email,
+      });
+
+      //session storage -- might remove later
+      if (res != undefined) {
+        sessionStorage.setItem("signedin", "true");
+        router.push("/");
       }
 
       console.log("User Registered: ", res);
@@ -48,7 +48,6 @@ export default function Register() {
     <div className="font-fira-sans flex h-screen flex-col justify-center text-center">
       <h1 className="text-center text-4xl">Register</h1>
       <h2>{error?.message}</h2>
-      <button onClick={() => {}}>CLICK</button>
       <form
         className="mx-auto flex flex-col space-y-3 py-2"
         onSubmit={(e) => {

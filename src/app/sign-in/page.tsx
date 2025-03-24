@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { Credentials } from "@/utils/types";
 import { auth } from "@/firebase/config";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 export default function SignIn() {
   //router hook
   const router = useRouter();
+  const [authState, loadingAuth] = useAuthState(auth);
+
+  //push to homepage if logged in
 
   //store user credentials fields in state
   const [credentials, setCredentials] = useState<Credentials>({
@@ -16,40 +22,39 @@ export default function SignIn() {
   });
 
   //firebase-hook to signin user with firebase auth
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, , , error] =
     useSignInWithEmailAndPassword(auth);
 
   //handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    error
-      ? console.log("Error:", error)
-      : console.log("Successful Registration");
     try {
       const res = await signInWithEmailAndPassword(
         credentials.email,
         credentials.password,
       );
 
-      if (res == undefined) {
-        //move to sign in page
-        router.push("/");
-      } else {
-        setCredentials({ email: "", password: "" });
-
-        //refresh page
-        router.refresh();
+      //session storage -- might remove later
+      if (res != undefined) {
+        sessionStorage.setItem("signedin", "true");
       }
     } catch (e) {
       console.log(e);
     }
   };
 
-  return (
+  useEffect(() => {
+    if (loadingAuth != true && authState != undefined) {
+      router.push("/");
+    }
+  }, [loadingAuth, authState, router]);
+
+  return loadingAuth ? (
+    <h1>LOADING</h1>
+  ) : (
     <div className="font-fira-sans flex h-screen flex-col justify-center">
       <h1 className="text-center text-4xl">Sign in</h1>
       <h2>{error?.message}</h2>
-      <h2>{user?.user.email}</h2>
       <form
         className="mx-auto flex flex-col space-y-3 py-2"
         onSubmit={(e) => {

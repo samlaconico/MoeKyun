@@ -1,51 +1,50 @@
 "use client";
 
-import { app, auth } from "@/firebase/config";
-import {
-  collection,
-  getFirestore,
-  query,
-  where,
-  documentId,
-} from "firebase/firestore";
+import Nav from "@/components/Nav";
+import { auth } from "@/firebase/config";
 import { useRouter } from "next/navigation";
-import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Home() {
-  const [authState] = useAuthState(auth);
+  const [authState, loadingAuth] = useAuthState(auth);
+
+  // const q = query(
+  //   collection(getFirestore(app), "userCollection"),
+  //   where(documentId(), "==", "yGvcNTpx77icy80vVJXt"),
+  // );
+
+  return loadingAuth ? (
+    <h1>LOADING</h1>
+  ) : authState ? (
+    <>
+      <Nav />
+      <div>CONTENT</div>
+    </>
+  ) : (
+    <WelcomePageNotSignedIn />
+  );
+}
+
+function WelcomePageNotSignedIn() {
   const router = useRouter();
 
-  const q = query(
-    collection(getFirestore(app), "userCollection"),
-    where(documentId(), "==", "yGvcNTpx77icy80vVJXt"),
-  );
-
-  const [value, loading, error] = useCollection(q, {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
-
-  const [signout] = useSignOut(auth);
-  return authState ? (
-    <div className="font-fira-sans text-center">
-      <h1>Hello! {loading ? "loading" : authState?.email}</h1>
-      <h2></h2>
-      <button
-        onClick={() => {
-          signout();
-        }}
-      >
-        Logout
-      </button>
-    </div>
-  ) : (
-    <div className="flex h-screen flex-col justify-center">
+  return (
+    <div className="flex h-screen flex-col items-center justify-center space-y-4">
       <button
         onClick={() => {
           router.push("/sign-in");
         }}
+        className="w-20 rounded-2xl bg-neutral-500"
       >
         Sign in
+      </button>
+      <button
+        onClick={() => {
+          router.push("/register");
+        }}
+        className="w-20 rounded-2xl bg-neutral-500"
+      >
+        Register
       </button>
     </div>
   );
