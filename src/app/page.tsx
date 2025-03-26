@@ -17,8 +17,7 @@ export default function Home() {
     <h1>LOADING</h1>
   ) : authState ? (
     <>
-      <Nav />
-      <div>CONTENT</div>
+      <div>welcome {authState.displayName}</div>
     </>
   ) : (
     <WelcomePageNotSignedIn />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fira_Sans } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/Nav";
 
 const firaSans = Fira_Sans({
   weight: "400",
@@ -21,8 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${firaSans.variable} antialiased m-auto container bg-neutral-950 text-white`}
+        className={`${firaSans.variable} container m-auto bg-neutral-950 text-white antialiased`}
       >
+        <header>
+          <Nav />
+        </header>
         {children}
       </body>
     </html>
