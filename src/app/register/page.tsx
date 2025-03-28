@@ -8,7 +8,7 @@ import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
@@ -36,9 +36,10 @@ export default function Register() {
       const res = await register(credentials.email, credentials.password);
 
       //add user email to unique document on firestore
-      await addDoc(collection(db, "userCollection"), {
+      await setDoc(doc(db, "userCollection", username), {
         email: credentials.email,
         username: username,
+        anime3x3: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       });
 
       //set username

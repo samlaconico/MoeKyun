@@ -1,16 +1,13 @@
 import List from "@/components/List";
-import Nav from "@/components/Nav";
 import UsernameHeader from "@/components/UsernameHeader";
 import { app } from "@/firebase/config";
 import {
   collection,
-  documentId,
   getDocs,
   getFirestore,
   query,
   where,
 } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
 
 export default async function Profile({
   params,
@@ -25,7 +22,7 @@ export default async function Profile({
     where("username", "==", id),
   );
   const querySnapshot = await getDocs(q);
-  console.log(querySnapshot.docs.length);
+
   if (querySnapshot.size != 0) {
     return (
       <div>
@@ -33,6 +30,7 @@ export default async function Profile({
       </div>
     );
   } else {
+    // TODO: 404 page
     return <div>404</div>;
   }
 }
