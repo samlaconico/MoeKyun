@@ -13,7 +13,7 @@ export default function UsernameHeader({ username }: { username: string }) {
     where("username", "==", username),
   );
 
-  const [value, loading, error] = useCollection(q, {
+  const [value, loading] = useCollection(q, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 

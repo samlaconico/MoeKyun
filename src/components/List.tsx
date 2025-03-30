@@ -14,7 +14,7 @@ export default function List({ username }: { username: string }) {
     where("username", "==", username),
   );
 
-  const [value, loading, error] = useCollection(q, {
+  const [value, loading] = useCollection(q, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
@@ -22,41 +22,44 @@ export default function List({ username }: { username: string }) {
     setIdList(value?.docs[0].get("anime3x3"));
   }
 
-  console.log(value?.docs[0].get("anime3x3"));
+  // console.log(value?.docs[0].get("animeList")[0]);
 
   return (
     <>
       <h1 className="font-fira-sans text-3xl font-semibold">3x3</h1>
       <div className="mb-2 flex flex-row space-x-2">
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
+        {[...Array(3)].map((v, i) => (
+          <div key={i} className="size-36 overflow-hidden bg-amber-300">
+            {" "}
+            <img
+              src={value?.docs[0].get("animeList")[i].image}
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
-      <div className="mb-2 flex flex-row space-x-2">
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
+      <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
+        {[...Array(3)].map((v, i) => (
+          <div key={i} className="size-36 bg-amber-300">
+            {" "}
+            <img
+              src={value?.docs[0].get("animeList")[i + 3].image}
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
-      <div className="mb-2 flex flex-row space-x-2">
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
-        <div className="size-36 bg-amber-300"></div>
+      <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
+        {[...Array(3)].map((v, i) => (
+          <div key={i} className="size-36 bg-amber-300">
+            {" "}
+            <img
+              src={value?.docs[0].get("animeList")[i + 6].image}
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
     </>
   );
-}
-
-function loadImagesFromURL({ list }: { list: number[] }) {
-  var query = `query Page($search: String, $type: MediaType) {
-    Page {
-      media(search: $search, type: $type) {
-        id
-        title {
-          english
-          romaji
-        }
-      }
-    }
-  }
-    `;
 }

@@ -7,21 +7,23 @@ import { AnimeType } from "@/firebase/types";
 export default function Search({
   callback,
 }: {
-  callback: (id: number) => void;
+  callback: (id: number, title: string, image: string) => void;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [animeQuery, setAnimeQuery] = useState<AnimeType[]>([]);
   const [focused, setFocused] = useState<boolean>(false);
   const [timer, setTimer] = useState<null | NodeJS.Timeout>(null);
 
-  var query = `query Page($search: String, $type: MediaType) {
+  const query = `query Page($search: String, $type: MediaType) {
   Page {
     media(search: $search, type: $type) {
       id
       title {
         english
         romaji
+      }
+      coverImage {
+        large
       }
     }
   }
@@ -36,10 +38,6 @@ export default function Search({
     setTimer(
       setTimeout(async () => {
         try {
-          setLoading(true);
-          const headers = {
-            "content-type": "application/json",
-          };
           const requestBody = {
             query: query,
             variables: {
@@ -60,12 +58,14 @@ export default function Search({
           const response = await axios(options);
           //TODO fix animeQuery being 1 search behind
           setAnimeQuery(response.data.data.Page.media.slice(0, 5));
-          console.log(animeQuery);
-          //   console.log("RESPONSE FROM AXIOS REQUEST", response.data.data.Page.media);
+          // console.log(animeQuery);
+          // console.log(
+          //   "RESPONSE FROM AXIOS REQUEST",
+          //   response.data.data.Page.media,
+          // );
         } catch (err) {
           console.log("ERROR DURING AXIOS REQUEST", err);
         } finally {
-          setLoading(false);
         }
       }, 500),
     );
@@ -87,7 +87,7 @@ export default function Search({
       <input
         type="text"
         onChange={(e) => {
-          setSearchInput((prev) => e.target.value);
+          setSearchInput(() => e.target.value);
         }}
         value={searchInput}
         className="mb-1 w-full bg-white px-2 text-black"
@@ -101,7 +101,7 @@ export default function Search({
                 onClick={() => {
                   setSearchInput(i.title.romaji);
                   setFocused(false);
-                  callback(i.id);
+                  callback(i.id, i.title.romaji, i.coverImage.large);
                 }}
                 key={i.id}
               >

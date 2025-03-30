@@ -6,54 +6,58 @@ import {
   getDocs,
   getFirestore,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import Search from "./Search";
-import { app, db } from "@/firebase/config";
+import { app, auth, db } from "@/firebase/config";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPanel({ user }: { user: string }) {
-  return (
-    <div>
-      <h1 className="font-fira-sans py-10 text-4xl font-bold">Settings</h1>
-      <h2 className="font-fira-sans pb-2 text-4xl font-bold">
-        Edit 3x3 Entries
-      </h2>
-      <Search
-        callback={(id) => {
-          setListEntry(user, 0, id);
-        }}
-      />
-      <Search
-        callback={(id) => {
-          console.log(id);
-        }}
-      />
-      <Search
-        callback={(id) => {
-          console.log(id);
-        }}
-      />
-      <Search
-        callback={(id) => {
-          console.log(id);
-        }}
-      />
-    </div>
-  );
+  const router = useRouter();
+
+  if (auth.currentUser?.displayName == user) {
+    return (
+      <div>
+        <h1 className="font-fira-sans py-10 text-4xl font-bold">Settings</h1>
+        <h2 className="font-fira-sans pb-2 text-4xl font-bold">
+          Edit 3x3 Entries
+        </h2>
+        {[...Array(9)].map((v, i) => (
+          <Search
+            key={i}
+            callback={(id, title, image) => {
+              setNewListEntry(user, i, id, title, image);
+            }}
+          ></Search>
+        ))}
+      </div>
+    );
+  } else {
+    router.push("/");
+  }
 }
 
-async function setListEntry(user: string, index: number, id: number) {
+async function setNewListEntry(
+  user: string,
+  index: number,
+  id: number,
+  title: string,
+  image: string,
+) {
   const q = query(
     collection(getFirestore(app), "userCollection"),
     where("username", "==", user),
   );
-  let temp = [];
+  let tempArray: {}[] = []; // eslint-disable-line
+  let tempObject = {}; // eslint-disable-line
   const docc = await getDocs(q);
   docc.forEach((doc) => {
-    temp = doc.data().anime3x3;
+    tempArray = doc.data().animeList;
   });
-  temp[index] = id;
-  await updateDoc(doc(db, "userCollection", user), { anime3x3: temp });
+
+  tempObject = { title: title, id: id, image: image };
+  tempArray[index] = tempObject;
+
+  await updateDoc(doc(db, "userCollection", user), { animeList: tempArray });
 }

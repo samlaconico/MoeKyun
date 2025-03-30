@@ -1,6 +1,5 @@
 "use client";
 
-import Nav from "@/components/Nav";
 import { auth } from "@/firebase/config";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";

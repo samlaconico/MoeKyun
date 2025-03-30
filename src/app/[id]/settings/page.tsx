@@ -1,7 +1,4 @@
 import SettingsPanel from "@/components/SettingsPanel";
-import { auth } from "@/firebase/config";
-import { param } from "motion/react-client";
-import { useRouter } from "next/navigation";
 
 export default async function Settings({
   params,

@@ -4,17 +4,15 @@ import { FormEvent, useState } from "react";
 import { Credentials } from "@/utils/types";
 import { auth, db } from "@/firebase/config";
 import {
-  useAuthState,
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
   const router = useRouter();
-  const [authState] = useAuthState(auth);
-  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+  const [updateProfile] = useUpdateProfile(auth);
 
   //store user credentials fields in state
   const [credentials, setCredentials] = useState<Credentials>({
@@ -25,7 +23,7 @@ export default function Register() {
   const [username, setUsername] = useState<string>("");
 
   //firebase-hook to create user with firebase auth
-  const [register, user, , error] = useCreateUserWithEmailAndPassword(auth);
+  const [register, , , error] = useCreateUserWithEmailAndPassword(auth);
 
   //handle form submission
   const handleSubmit = async (e: FormEvent) => {
@@ -39,7 +37,7 @@ export default function Register() {
       await setDoc(doc(db, "userCollection", username), {
         email: credentials.email,
         username: username,
-        anime3x3: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        animeList: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
       });
 
       //set username
@@ -72,7 +70,7 @@ export default function Register() {
           className="mx-auto rounded-md border-2 border-white bg-neutral-800 px-2"
           placeholder="Username"
           onChange={(e) => {
-            setUsername((prev) => e.target.value);
+            setUsername(() => e.target.value);
           }}
         />
         <input
