@@ -3,4 +3,5 @@ export type AnimeType = {
   id: number;
   title: TitleType;
   coverImage: { large: string };
+  siteUrl: string;
 };

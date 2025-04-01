@@ -12,11 +12,18 @@ import {
 import Search from "./Search";
 import { app, auth, db } from "@/firebase/config";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function SettingsPanel({ user }: { user: string }) {
   const router = useRouter();
+  const [authState, loading] = useAuthState(auth);
 
-  if (auth.currentUser?.displayName == user) {
+  useEffect(() => {
+    if (authState?.displayName != user && !loading) router.push("/");
+  }, [authState?.displayName, loading]);
+
+  if (!loading)
     return (
       <div className="my-10">
         <button
@@ -34,16 +41,13 @@ export default function SettingsPanel({ user }: { user: string }) {
         {[...Array(9)].map((v, i) => (
           <Search
             key={i}
-            callback={(id, title, image) => {
-              setNewListEntry(user, i, id, title, image);
+            callback={(id, title, image, link) => {
+              setNewListEntry(user, i, id, title, image, link);
             }}
           ></Search>
         ))}
       </div>
     );
-  } else {
-    router.push("/");
-  }
 }
 
 async function setNewListEntry(
@@ -52,6 +56,7 @@ async function setNewListEntry(
   id: number,
   title: string,
   image: string,
+  link: string,
 ) {
   const q = query(
     collection(getFirestore(app), "userCollection"),
@@ -64,7 +69,7 @@ async function setNewListEntry(
     tempArray = doc.data().animeList;
   });
 
-  tempObject = { title: title, id: id, image: image };
+  tempObject = { title: title, id: id, image: image, link: link };
   tempArray[index] = tempObject;
 
   await updateDoc(doc(db, "userCollection", user), { animeList: tempArray });

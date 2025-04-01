@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
+import Link from "next/link";
 
 export default function List({ username }: { username: string }) {
   // const [open, setOpen] = useState<boolean>(false);
@@ -35,11 +36,13 @@ export default function List({ username }: { username: string }) {
             <Skeleton key={i} className="size-24 bg-amber-300 md:size-36" />
           ) : (
             <div key={i} className="size-24 bg-amber-300 md:size-36">
-              {" "}
-              <img
-                src={value?.docs[0].get("animeList")[i].image}
-                className="object-cover"
-              />
+              <Link href={value?.docs[0].get("animeList")[i].link}>
+                {" "}
+                <img
+                  src={value?.docs[0].get("animeList")[i].image}
+                  className="object-cover"
+                />
+              </Link>
             </div>
           ),
         )}
@@ -51,10 +54,12 @@ export default function List({ username }: { username: string }) {
           ) : (
             <div key={i} className="size-24 bg-amber-300 md:size-36">
               {" "}
-              <img
-                src={value?.docs[0].get("animeList")[i + 3].image}
-                className="object-cover"
-              />
+              <Link href={value?.docs[0].get("animeList")[i].link}>
+                <img
+                  src={value?.docs[0].get("animeList")[i + 3].image}
+                  className="object-cover"
+                />
+              </Link>
             </div>
           ),
         )}
@@ -66,10 +71,12 @@ export default function List({ username }: { username: string }) {
           ) : (
             <div key={i} className="size-24 bg-amber-300 md:size-36">
               {" "}
-              <img
-                src={value?.docs[0].get("animeList")[i + 6].image}
-                className="object-cover"
-              />
+              <Link href={value?.docs[0].get("animeList")[i].link}>
+                <img
+                  src={value?.docs[0].get("animeList")[i + 6].image}
+                  className="object-cover"
+                />
+              </Link>
             </div>
           ),
         )}

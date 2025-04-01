@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { AnimeType } from "@/firebase/types";
 
 export default function Search({
   callback,
 }: {
-  callback: (id: number, title: string, image: string) => void;
+  callback: (id: number, title: string, image: string, link: string) => void;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [animeQuery, setAnimeQuery] = useState<AnimeType[]>([]);
   const [focused, setFocused] = useState<boolean>(false);
   const [timer, setTimer] = useState<null | NodeJS.Timeout>(null);
+  const [currentSelection, setCurrentSelection] = useState<number>(0);
 
   const query = `query Page($search: String, $type: MediaType) {
   Page {
@@ -25,6 +26,7 @@ export default function Search({
       coverImage {
         large
       }
+      siteUrl
     }
   }
 }
@@ -57,7 +59,7 @@ export default function Search({
 
           const response = await axios(options);
           //TODO fix animeQuery being 1 search behind
-          setAnimeQuery(response.data.data.Page.media.slice(0, 5));
+          setAnimeQuery(response.data.data.Page.media.slice(0, 6));
           // console.log(animeQuery);
           // console.log(
           //   "RESPONSE FROM AXIOS REQUEST",
@@ -69,6 +71,25 @@ export default function Search({
         }
       }, 500),
     );
+  };
+
+  const handleKeyboard = (e: KeyboardEvent) => {
+    if (e.key == "ArrowDown" && currentSelection != 5) {
+      setCurrentSelection((currentSelection) => currentSelection + 1);
+    } else if (e.key == "ArrowDown") {
+      setCurrentSelection(0);
+    }
+    if (e.key == "ArrowUp" && currentSelection != 0) {
+      setCurrentSelection((currentSelection) => currentSelection - 1);
+    } else if (e.key == "ArrowUp") {
+      setCurrentSelection(5);
+    }
+    if (e.key == "Enter") {
+      const i = animeQuery[currentSelection];
+      setSearchInput(i.title.romaji);
+      setFocused(false);
+      callback(i.id, i.title.romaji, i.coverImage.large, i.siteUrl);
+    }
   };
 
   useEffect(() => {
@@ -84,38 +105,50 @@ export default function Search({
         setFocused(true);
       }}
     >
-      <input
-        type="text"
-        onChange={(e) => {
-          setSearchInput(() => e.target.value);
-        }}
-        value={searchInput}
-        className="mb-1 w-full bg-white px-2 text-black"
-      ></input>
-      {focused ? (
-        <div>
-          {animeQuery.map((i: AnimeType) => {
-            return (
-              <button
-                className="w-full text-left"
-                onClick={() => {
-                  setSearchInput(i.title.romaji);
-                  setFocused(false);
-                  callback(i.id, i.title.romaji, i.coverImage.large);
-                }}
-                key={i.id}
-              >
-                <h1 className="border-y-2 border-white bg-white p-1 px-2 text-black hover:cursor-pointer hover:border-black hover:underline">
-                  {i.title.romaji}{" "}
-                  {i.title.english ? `(${i.title.english})` : ""}
-                </h1>
-              </button>
-            );
-          })}
-        </div>
-      ) : (
-        ""
-      )}
+      <search>
+        <input
+          type="text"
+          onKeyDown={(e) => {
+            handleKeyboard(e);
+          }}
+          onChange={(e) => {
+            setSearchInput(() => e.target.value);
+          }}
+          value={searchInput}
+          className="mb-1 w-full bg-white px-2 text-black"
+        ></input>
+        {focused ? (
+          <div>
+            {animeQuery.map((i: AnimeType, index) => {
+              return (
+                <button
+                  className="w-full text-left"
+                  onClick={() => {
+                    setSearchInput(i.title.romaji);
+                    setFocused(false);
+                    callback(
+                      i.id,
+                      i.title.romaji,
+                      i.coverImage.large,
+                      i.siteUrl,
+                    );
+                  }}
+                  key={i.id}
+                >
+                  <h1
+                    className={`border-y-2 border-white ${currentSelection == index ? `bg-neutral-300` : `bg-white`} p-1 px-2 text-black hover:cursor-pointer hover:border-black hover:underline`}
+                  >
+                    {i.title.romaji}{" "}
+                    {i.title.english ? `(${i.title.english})` : ""}
+                  </h1>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          ""
+        )}
+      </search>
     </div>
   );
 }
