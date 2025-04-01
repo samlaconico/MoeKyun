@@ -1,5 +1,5 @@
 import List from "@/components/List";
-import UsernameHeader from "@/components/UsernameHeader";
+import ProfileHeader from "@/components/ProfileHeader";
 import { app } from "@/firebase/config";
 import {
   collection,
@@ -37,8 +37,8 @@ export default async function Profile({
 
 function Page({ username }: { username: string }) {
   return (
-    <div>
-      <UsernameHeader username={username} />
+    <div className="">
+      <ProfileHeader username={username} />
       <List username={username} />
     </div>
   );

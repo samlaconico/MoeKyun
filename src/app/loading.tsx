@@ -1,7 +1,9 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function Loading() {
   return (
     <div className="mx-auto flex flex-col justify-evenly">
-      <h1>LOADING</h1>
+      <Skeleton className="h-full w-full"></Skeleton>
     </div>
   );
 }

@@ -18,8 +18,16 @@ export default function SettingsPanel({ user }: { user: string }) {
 
   if (auth.currentUser?.displayName == user) {
     return (
-      <div>
-        <h1 className="font-fira-sans py-10 text-4xl font-bold">Settings</h1>
+      <div className="my-10">
+        <button
+          onClick={() => {
+            router.back();
+          }}
+          className="cursor-pointer hover:underline"
+        >
+          <h1>return</h1>
+        </button>
+        <h1 className="font-fira-sans pb-10 text-4xl font-bold">Settings</h1>
         <h2 className="font-fira-sans pb-2 text-4xl font-bold">
           Edit 3x3 Entries
         </h2>

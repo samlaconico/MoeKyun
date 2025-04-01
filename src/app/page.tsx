@@ -13,7 +13,7 @@ export default function Home() {
   // );
 
   return loadingAuth ? (
-    <h1>LOADING</h1>
+    <h1></h1>
   ) : authState ? (
     <>
       <div>welcome {authState.displayName}</div>

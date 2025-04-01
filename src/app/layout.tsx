@@ -22,12 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${firaSans.variable} container m-auto bg-neutral-900 px-10 text-white antialiased md:px-0`}
+        className={`${firaSans.variable} m-auto bg-neutral-900 text-white antialiased md:px-0`}
       >
         <header>
           <Nav />
         </header>
-        {children}
+        <div className="container m-auto px-10 md:px-0">{children}</div>
       </body>
     </html>
   );
