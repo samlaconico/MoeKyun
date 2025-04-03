@@ -1,3 +1,4 @@
+import { ReviewEdit } from "@/components/Review";
 import SettingsPanel from "@/components/SettingsPanel";
 
 export default async function Settings({
@@ -10,6 +11,7 @@ export default async function Settings({
   return (
     <div>
       <SettingsPanel user={id} />
+      <ReviewEdit />
     </div>
   );
 }

@@ -39,6 +39,14 @@ export default function Nav() {
           >
             {authState ? "Logout" : "Sign in"}
           </button>
+
+          {!authState ? (
+            <Link href={"/register"} className="p-2 hover:underline">
+              Register
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </nav>

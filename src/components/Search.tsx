@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useEffect, useState } from "react";
 import axios from "axios";
-import { AnimeType } from "@/firebase/types";
+import { AnimeType } from "@/utils/types";
 
 export default function Search({
   callback,
@@ -24,7 +24,7 @@ export default function Search({
         romaji
       }
       coverImage {
-        large
+        extraLarge
       }
       siteUrl
     }
@@ -88,7 +88,7 @@ export default function Search({
       const i = animeQuery[currentSelection];
       setSearchInput(i.title.romaji);
       setFocused(false);
-      callback(i.id, i.title.romaji, i.coverImage.large, i.siteUrl);
+      callback(i.id, i.title.romaji, i.coverImage.extraLarge, i.siteUrl);
     }
   };
 
@@ -118,7 +118,7 @@ export default function Search({
           className="mb-1 w-full bg-white px-2 text-black"
         ></input>
         {focused ? (
-          <div>
+          <div className="absolute w-1/2">
             {animeQuery.map((i: AnimeType, index) => {
               return (
                 <button
@@ -129,7 +129,7 @@ export default function Search({
                     callback(
                       i.id,
                       i.title.romaji,
-                      i.coverImage.large,
+                      i.coverImage.extraLarge,
                       i.siteUrl,
                     );
                   }}

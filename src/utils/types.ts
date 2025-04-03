@@ -15,3 +15,11 @@ export type AuthHook<M> = [
 export type RegisterType = AuthHook<
   (credentials: Credentials) => Promise<UserCredential | undefined>
 >;
+
+export type TitleType = { english: string; romaji: string };
+export type AnimeType = {
+  id: number;
+  title: TitleType;
+  coverImage: { extraLarge: string };
+  siteUrl: string;
+};

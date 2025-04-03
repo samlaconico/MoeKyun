@@ -21,7 +21,7 @@ export default function SettingsPanel({ user }: { user: string }) {
 
   useEffect(() => {
     if (authState?.displayName != user && !loading) router.push("/");
-  }, [authState?.displayName, loading]);
+  }, [authState?.displayName, loading, router, user]);
 
   if (!loading)
     return (

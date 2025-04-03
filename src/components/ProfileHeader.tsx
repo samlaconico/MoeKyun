@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
+import Image from "next/image";
 
 export default function ProfileHeader({ username }: { username: string }) {
   const router = useRouter();
@@ -21,9 +22,11 @@ export default function ProfileHeader({ username }: { username: string }) {
 
   // console.log(value?.docs[0].get("username"));
   return (
-    <motion.div className="my-10 flex flex-row items-end space-x-3">
-      <img
+    <motion.div className="relative my-10 flex w-auto flex-row items-end space-x-3">
+      <Image
         alt="Profile Image"
+        width={100}
+        height={100}
         src={
           auth.currentUser?.photoURL
             ? auth.currentUser?.photoURL
