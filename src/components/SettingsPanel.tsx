@@ -14,6 +14,7 @@ import { app, auth, db } from "@/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { TitleType } from "@/utils/types";
 
 export default function SettingsPanel({ user }: { user: string }) {
   const router = useRouter();
@@ -54,7 +55,7 @@ async function setNewListEntry(
   user: string,
   index: number,
   id: number,
-  title: string,
+  title: TitleType,
   image: string,
   link: string,
 ) {

@@ -1,19 +1,20 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { AnimeType } from "@/utils/types";
+import { AnimeType, TitleType } from "@/utils/types";
 
 export default function Search({
   callback,
 }: {
-  callback: (id: number, title: string, image: string, link: string) => void;
+  callback: (id: number, title: TitleType, image: string, link: string) => void;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [animeQuery, setAnimeQuery] = useState<AnimeType[]>([]);
   const [focused, setFocused] = useState<boolean>(false);
   const [timer, setTimer] = useState<null | NodeJS.Timeout>(null);
   const [currentSelection, setCurrentSelection] = useState<number>(0);
+  const ref = useRef<HTMLDivElement>(null);
 
   const query = `query Page($search: String, $type: MediaType) {
   Page {
@@ -31,6 +32,16 @@ export default function Search({
   }
 }
   `;
+
+  useEffect(() => {
+    const handleOnClick = (e: Event) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setFocused(false);
+      }
+    };
+
+    document.addEventListener("click", handleOnClick);
+  }, []);
 
   const getAnimeByAxiosAPICall = async () => {
     if (timer) {
@@ -88,7 +99,10 @@ export default function Search({
       const i = animeQuery[currentSelection];
       setSearchInput(i.title.romaji);
       setFocused(false);
-      callback(i.id, i.title.romaji, i.coverImage.extraLarge, i.siteUrl);
+      callback(i.id, i.title, i.coverImage.extraLarge, i.siteUrl);
+    }
+    if (e.key == "Escape") {
+      setFocused(false);
     }
   };
 
@@ -104,6 +118,7 @@ export default function Search({
       onFocusCapture={() => {
         setFocused(true);
       }}
+      ref={ref}
     >
       <search>
         <input
@@ -126,12 +141,7 @@ export default function Search({
                   onClick={() => {
                     setSearchInput(i.title.romaji);
                     setFocused(false);
-                    callback(
-                      i.id,
-                      i.title.romaji,
-                      i.coverImage.extraLarge,
-                      i.siteUrl,
-                    );
+                    callback(i.id, i.title, i.coverImage.extraLarge, i.siteUrl);
                   }}
                   key={i.id}
                 >

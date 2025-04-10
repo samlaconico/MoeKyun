@@ -12,7 +12,7 @@ export default function Nav() {
   const router = useRouter();
 
   return (
-    <nav className="font-fira-sans flex flex-row justify-between bg-neutral-800 px-5 py-10 md:px-10">
+    <nav className="font-fira-sans flex flex-row justify-between bg-neutral-800 px-5 py-3 md:px-10">
       <Link href="/">
         <h1 className="my-auto text-4xl font-bold">ANIME LIST SITE NAME</h1>
       </Link>
@@ -26,6 +26,16 @@ export default function Nav() {
               {authState?.displayName}
             </h1>
           </Link>
+          {authState ? (
+            <Link href={`/update`} className="my-auto">
+              <h1 className="my-auto hover:underline hover:shadow-white">
+                Add Update
+              </h1>
+            </Link>
+          ) : (
+            ""
+          )}
+
           <button
             className="cursor-pointer p-2 hover:underline"
             onClick={() => {

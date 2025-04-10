@@ -1,5 +1,6 @@
 import List from "@/components/List";
 import ProfileHeader from "@/components/ProfileHeader";
+import { UpdatesFromUser } from "@/components/Updates";
 import { app } from "@/firebase/config";
 import {
   collection,
@@ -37,9 +38,17 @@ export default async function Profile({
 
 function Page({ username }: { username: string }) {
   return (
-    <div className="">
+    <div className="self-center">
       <ProfileHeader username={username} />
-      <List username={username} />
+      <div className="grid place-items-start gap-x-6 gap-y-10 md:grid-cols-2">
+        <List username={username} />
+        <div className="mx-auto flex w-full flex-col">
+          <h1 className="font-fira-sans text-3xl font-semibold">
+            Recent Updates
+          </h1>
+          <UpdatesFromUser username={username} />
+        </div>
+      </div>
     </div>
   );
 }

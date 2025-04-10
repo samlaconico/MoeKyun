@@ -2,15 +2,13 @@
 
 import { app, auth } from "@/firebase/config";
 import { collection, getFirestore, query, where } from "firebase/firestore";
-import { useRouter } from "next/navigation";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ProfileHeader({ username }: { username: string }) {
-  const router = useRouter();
-
   const q = query(
     collection(getFirestore(app), "userCollection"),
     where("username", "==", username),
@@ -34,13 +32,9 @@ export default function ProfileHeader({ username }: { username: string }) {
         }
       />
       <div>
-        <button
+        <Link
           className={loading ? `` : `cursor-pointer hover:underline`}
-          onClick={() => {
-            if (!loading) {
-              router.push(`/${username}/settings`);
-            }
-          }}
+          href={`/${username}/settings`}
         >
           {loading ? (
             <Skeleton className="h-4 w-24 rounded bg-amber-300"></Skeleton>
@@ -49,7 +43,7 @@ export default function ProfileHeader({ username }: { username: string }) {
               {auth.currentUser?.displayName == username ? "Edit Profile" : ""}
             </h1>
           )}
-        </button>
+        </Link>
 
         {loading ? (
           <Skeleton className="h-8 w-32 rounded bg-amber-300"></Skeleton>
