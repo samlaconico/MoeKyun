@@ -38,13 +38,13 @@ export default function PostUpdate() {
     }
   };
 
-  useEffect(() => {
-    console.log(entry);
-  }, [entry]);
+  // useEffect(() => {
+  //   console.log(entry);
+  // }, [entry]);
 
   return (
-    <div className="w-full py-10 md:w-1/2">
-      <h1 className="font-fira-sans mb-2 text-3xl font-bold">Post Update</h1>
+    <div className="font-fira-sans w-full py-10">
+      <h1 className="mb-2 text-3xl font-bold">Post Update</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -70,6 +70,7 @@ export default function PostUpdate() {
                 siteUrl: link,
               });
             }}
+            placeholder="Anime Title"
           />
           <select
             onChange={(e) => {
@@ -82,7 +83,7 @@ export default function PostUpdate() {
           </select>
         </div>
         <textarea
-          maxLength={500}
+          maxLength={100}
           onChange={(e) => {
             setCharCount(e.target.value.length);
             setBody(e.target.value);
@@ -90,13 +91,13 @@ export default function PostUpdate() {
           className="h-32 resize-none rounded-2xl border border-neutral-700 bg-neutral-800 px-2 py-1 text-white"
         ></textarea>
         <div className="flex flex-row justify-between">
+          <span className="px-1 py-1 text-right">{charCount}/100</span>
           <button
             type="submit"
-            className="w-min rounded-2xl bg-neutral-800 px-2 py-1 text-left hover:cursor-pointer hover:bg-neutral-600"
+            className="w-min rounded-md bg-neutral-800 px-2 py-1 text-left hover:cursor-pointer hover:bg-neutral-600"
           >
             Submit
           </button>
-          <span className="text-right">{charCount}/500</span>
         </div>
       </form>
     </div>

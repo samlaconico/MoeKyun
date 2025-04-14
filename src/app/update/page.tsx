@@ -19,7 +19,6 @@ export default function UpdatePage() {
 
   return (
     <>
-      <h1>update page</h1>
       <PostUpdate />
     </>
   );

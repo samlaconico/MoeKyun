@@ -40,7 +40,7 @@ function Page({ username }: { username: string }) {
   return (
     <div className="self-center">
       <ProfileHeader username={username} />
-      <div className="grid place-items-start gap-x-6 gap-y-10 md:grid-cols-2">
+      <div className="place-items-start space-y-5 gap-x-6 gap-y-10 md:grid md:grid-cols-2">
         <List username={username} />
         <div className="mx-auto flex w-full flex-col">
           <h1 className="font-fira-sans text-3xl font-semibold">

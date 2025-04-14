@@ -2,11 +2,18 @@
 
 import { app, auth } from "@/firebase/config";
 import { collection, getFirestore, query, where } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
+import {
+  useCollection,
+  useCollectionData,
+  useCollectionOnce,
+} from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
+import { checkFollow, Follow, Unfollow } from "@/utils/Follow";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useEffect, useState } from "react";
 
 export default function ProfileHeader({ username }: { username: string }) {
   const q = query(
@@ -14,11 +21,16 @@ export default function ProfileHeader({ username }: { username: string }) {
     where("username", "==", username),
   );
 
-  const [value, loading] = useCollection(q, {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
+  const [authState, authLoading] = useAuthState(auth);
+  const [value, loading] = useCollectionOnce(q, {});
+  const [follower, setFollow] = useState<boolean>(false);
 
-  // console.log(value?.docs[0].get("username"));
+  useEffect(() => {
+    setFollow(value?.docs[0].data().followers.includes(authState?.displayName));
+  }, [loading]);
+
+  console.log(follower);
+
   return (
     <motion.div className="relative my-10 flex w-auto flex-row items-end space-x-3">
       <Image
@@ -32,25 +44,61 @@ export default function ProfileHeader({ username }: { username: string }) {
         }
       />
       <div>
-        <Link
-          className={loading ? `` : `cursor-pointer hover:underline`}
-          href={`/${username}/settings`}
-        >
-          {loading ? (
-            <Skeleton className="h-4 w-24 rounded bg-amber-300"></Skeleton>
+        {!loading ? (
+          username != auth.currentUser?.displayName && auth.currentUser ? (
+            <button
+              className={loading ? `` : `cursor-pointer hover:underline`}
+              onClick={() => {
+                if (follower) {
+                  Unfollow({ username });
+                } else {
+                  Follow({ username });
+                }
+              }}
+            >
+              {loading ? (
+                ""
+              ) : (
+                <h1 className="font-fira-sans">
+                  {follower ? "Unfollow" : "Follow"}
+                </h1>
+              )}
+            </button>
           ) : (
-            <h1 className="font-fira-sans">
-              {auth.currentUser?.displayName == username ? "Edit Profile" : ""}
-            </h1>
-          )}
-        </Link>
+            <Link
+              className={loading ? `` : `cursor-pointer hover:underline`}
+              href={`/${username}/settings`}
+            >
+              {loading ? (
+                ""
+              ) : (
+                <h1 className="font-fira-sans">
+                  {auth.currentUser?.displayName == username
+                    ? "Edit Profile"
+                    : ""}
+                </h1>
+              )}
+            </Link>
+          )
+        ) : (
+          ""
+        )}
 
         {loading ? (
           <Skeleton className="h-8 w-32 rounded bg-amber-300"></Skeleton>
         ) : (
-          <h1 className="font-fira-sans text-4xl font-bold">
-            {value?.docs[0].get("username")}
-          </h1>
+          <div className="flex flex-row place-items-end space-x-2">
+            <h1 className="font-fira-sans text-4xl font-bold">
+              {value?.docs[0].get("username")}
+            </h1>
+
+            <h1 className="font-fira-sans text-md font-bold">
+              Following {value?.docs[0].get("following").length}
+            </h1>
+            <h1 className="font-fira-sans text-md font-bold">
+              Followers {value?.docs[0].get("followers").length}
+            </h1>
+          </div>
         )}
       </div>
     </motion.div>

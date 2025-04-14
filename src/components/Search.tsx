@@ -6,8 +6,10 @@ import { AnimeType, TitleType } from "@/utils/types";
 
 export default function Search({
   callback,
+  placeholder,
 }: {
   callback: (id: number, title: TitleType, image: string, link: string) => void;
+  placeholder?: string;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
   const [animeQuery, setAnimeQuery] = useState<AnimeType[]>([]);
@@ -114,7 +116,7 @@ export default function Search({
 
   return (
     <div
-      className="w-64 overflow-hidden"
+      className="overflow-hidden"
       onFocusCapture={() => {
         setFocused(true);
       }}
@@ -123,6 +125,7 @@ export default function Search({
       <search>
         <input
           type="text"
+          placeholder={placeholder}
           onKeyDown={(e) => {
             handleKeyboard(e);
           }}
@@ -130,7 +133,7 @@ export default function Search({
             setSearchInput(() => e.target.value);
           }}
           value={searchInput}
-          className="mb-1 w-full bg-white px-2 text-black"
+          className="mb-1 w-full rounded-sm border-neutral-800 bg-neutral-800 px-2 text-white focus:outline-0"
         ></input>
         {focused ? (
           <div className="absolute w-1/2">
@@ -146,7 +149,7 @@ export default function Search({
                   key={i.id}
                 >
                   <h1
-                    className={`border-y-2 border-white ${currentSelection == index ? `bg-neutral-300` : `bg-white`} p-1 px-2 text-black hover:cursor-pointer hover:border-black hover:underline`}
+                    className={` ${currentSelection == index ? `bg-neutral-700` : `bg-neutral-800`} p-1 px-2 text-white hover:cursor-pointer hover:border-black hover:underline`}
                   >
                     {i.title.romaji}{" "}
                     {i.title.english ? `(${i.title.english})` : ""}

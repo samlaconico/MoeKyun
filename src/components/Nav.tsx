@@ -14,7 +14,7 @@ export default function Nav() {
   return (
     <nav className="font-fira-sans flex flex-row justify-between bg-neutral-800 px-5 py-3 md:px-10">
       <Link href="/">
-        <h1 className="my-auto text-4xl font-bold">ANIME LIST SITE NAME</h1>
+        <h1 className="my-auto text-4xl font-bold">MoeKyun</h1>
       </Link>
 
       {loading ? (
@@ -37,7 +37,7 @@ export default function Nav() {
           )}
 
           <button
-            className="cursor-pointer p-2 hover:underline"
+            className="cursor-pointer hover:underline"
             onClick={() => {
               if (authState) {
                 signOut(auth);

@@ -39,6 +39,8 @@ export default function Register() {
         email: credentials.email,
         username: username,
         animeList: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
+        followers: [],
+        following: [],
       });
 
       //set username

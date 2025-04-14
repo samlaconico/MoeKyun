@@ -2,31 +2,19 @@
 
 import { app } from "@/firebase/config";
 import { collection, getFirestore, query, where } from "firebase/firestore";
-import { useState } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useCollectionOnce } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function List({ username }: { username: string }) {
-  // const [open, setOpen] = useState<boolean>(false);
-  const [idList, setIdList] = useState<number[]>([]);
-
   const q = query(
     collection(getFirestore(app), "userCollection"),
     where("username", "==", username),
   );
 
-  const [value, loading] = useCollection(q, {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
-
-  if (!loading && idList.length != 0) {
-    setIdList(value?.docs[0].get("anime3x3"));
-  }
-
-  // console.log(value?.docs[0].get("animeList")[0]);
+  const [value, loading] = useCollectionOnce(q);
 
   return (
     <motion.div className="w-full">
@@ -50,6 +38,7 @@ export default function List({ username }: { username: string }) {
                     alt={value?.docs[0].get("animeList")[i].title}
                     fill
                     src={value?.docs[0].get("animeList")[i].image}
+                    sizes="33vw"
                     className="w-full object-cover"
                   />
                 ) : (
@@ -80,6 +69,7 @@ export default function List({ username }: { username: string }) {
                     fill
                     src={value?.docs[0].get("animeList")[i + 3].image}
                     className="w-full object-cover"
+                    sizes="33vw"
                   />
                 ) : (
                   ""
@@ -109,6 +99,7 @@ export default function List({ username }: { username: string }) {
                     fill
                     src={value?.docs[0].get("animeList")[i + 6].image}
                     className="w-full object-cover"
+                    sizes="33vw"
                   />
                 ) : (
                   ""
