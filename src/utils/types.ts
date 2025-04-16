@@ -17,9 +17,12 @@ export type RegisterType = AuthHook<
 >;
 
 export type TitleType = { english: string; romaji: string };
+
+//pass emptystring for undefined
 export type AnimeType = {
   id: number;
   title: TitleType;
   coverImage: { extraLarge: string };
   siteUrl: string;
+  episodes: number;
 };

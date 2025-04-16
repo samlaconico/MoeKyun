@@ -2,18 +2,13 @@
 
 import { app, auth } from "@/firebase/config";
 import { collection, getFirestore, query, where } from "firebase/firestore";
-import {
-  useCollection,
-  useCollectionData,
-  useCollectionOnce,
-} from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
-import { checkFollow, Follow, Unfollow } from "@/utils/Follow";
+import { Follow, Unfollow } from "@/utils/Follow";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useEffect, useState } from "react";
 
 export default function ProfileHeader({ username }: { username: string }) {
   const q = query(
@@ -21,15 +16,10 @@ export default function ProfileHeader({ username }: { username: string }) {
     where("username", "==", username),
   );
 
-  const [authState, authLoading] = useAuthState(auth);
-  const [value, loading] = useCollectionOnce(q, {});
-  const [follower, setFollow] = useState<boolean>(false);
-
-  useEffect(() => {
-    setFollow(value?.docs[0].data().followers.includes(authState?.displayName));
-  }, [loading]);
-
-  console.log(follower);
+  const [authState] = useAuthState(auth);
+  const [value, loading] = useCollection(q, {
+    snapshotListenOptions: { includeMetadataChanges: true },
+  });
 
   return (
     <motion.div className="relative my-10 flex w-auto flex-row items-end space-x-3">
@@ -49,7 +39,11 @@ export default function ProfileHeader({ username }: { username: string }) {
             <button
               className={loading ? `` : `cursor-pointer hover:underline`}
               onClick={() => {
-                if (follower) {
+                if (
+                  value?.docs[0]
+                    .data()
+                    .followers.includes(authState?.displayName)
+                ) {
                   Unfollow({ username });
                 } else {
                   Follow({ username });
@@ -60,7 +54,11 @@ export default function ProfileHeader({ username }: { username: string }) {
                 ""
               ) : (
                 <h1 className="font-fira-sans">
-                  {follower ? "Unfollow" : "Follow"}
+                  {value?.docs[0]
+                    .data()
+                    .followers.includes(authState?.displayName)
+                    ? "Unfollow"
+                    : "Follow"}
                 </h1>
               )}
             </button>
@@ -92,12 +90,16 @@ export default function ProfileHeader({ username }: { username: string }) {
               {value?.docs[0].get("username")}
             </h1>
 
-            <h1 className="font-fira-sans text-md font-bold">
-              Following {value?.docs[0].get("following").length}
-            </h1>
-            <h1 className="font-fira-sans text-md font-bold">
-              Followers {value?.docs[0].get("followers").length}
-            </h1>
+            <Link href={`${username}/following`}>
+              <h1 className="font-fira-sans text-md font-bold hover:underline">
+                Following {value?.docs[0].get("following").length}
+              </h1>
+            </Link>
+            <Link href={`${username}/followers`}>
+              <h1 className="font-fira-sans text-md font-bold hover:underline">
+                Followers {value?.docs[0].get("followers").length}
+              </h1>
+            </Link>
           </div>
         )}
       </div>

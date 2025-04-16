@@ -41,7 +41,7 @@ export default function Nav() {
             onClick={() => {
               if (authState) {
                 signOut(auth);
-                sessionStorage.setItem("signedin", "false");
+                router.refresh();
               } else {
                 router.push("/sign-in");
               }

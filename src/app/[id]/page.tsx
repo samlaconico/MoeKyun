@@ -32,7 +32,11 @@ export default async function Profile({
     );
   } else {
     // TODO: 404 page
-    return <div>404</div>;
+    return (
+      <div className="absolute top-1/2 left-1/2 -translate-1/2 text-center">
+        404 Not Found
+      </div>
+    );
   }
 }
 

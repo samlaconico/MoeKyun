@@ -2,13 +2,13 @@
 
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { AnimeType, TitleType } from "@/utils/types";
+import { AnimeType } from "@/utils/types";
 
 export default function Search({
   callback,
   placeholder,
 }: {
-  callback: (id: number, title: TitleType, image: string, link: string) => void;
+  callback: (entry: AnimeType) => void;
   placeholder?: string;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -30,6 +30,7 @@ export default function Search({
         extraLarge
       }
       siteUrl
+      episodes
     }
   }
 }
@@ -73,7 +74,7 @@ export default function Search({
           const response = await axios(options);
           //TODO fix animeQuery being 1 search behind
           setAnimeQuery(response.data.data.Page.media.slice(0, 6));
-          // console.log(animeQuery);
+          console.log(animeQuery);
           // console.log(
           //   "RESPONSE FROM AXIOS REQUEST",
           //   response.data.data.Page.media,
@@ -101,7 +102,7 @@ export default function Search({
       const i = animeQuery[currentSelection];
       setSearchInput(i.title.romaji);
       setFocused(false);
-      callback(i.id, i.title, i.coverImage.extraLarge, i.siteUrl);
+      callback(i);
     }
     if (e.key == "Escape") {
       setFocused(false);
@@ -144,7 +145,7 @@ export default function Search({
                   onClick={() => {
                     setSearchInput(i.title.romaji);
                     setFocused(false);
-                    callback(i.id, i.title, i.coverImage.extraLarge, i.siteUrl);
+                    callback(i);
                   }}
                   key={i.id}
                 >

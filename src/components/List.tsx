@@ -27,17 +27,20 @@ export default function List({ username }: { username: string }) {
             <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
               <Link
                 href={
-                  value?.docs[0].get("animeList")[i].link != undefined
-                    ? value?.docs[0].get("animeList")[i].link
+                  value?.docs[0].get("animeList")[i].siteUrl != undefined
+                    ? value?.docs[0].get("animeList")[i].siteUrl
                     : ""
                 }
               >
                 {" "}
-                {value?.docs[0].get("animeList")[i].image != undefined ? (
+                {value?.docs[0].get("animeList")[i].coverImage.extraLarge !=
+                "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i].title}
+                    alt={value?.docs[0].get("animeList")[i].title.english}
                     fill
-                    src={value?.docs[0].get("animeList")[i].image}
+                    src={
+                      value?.docs[0].get("animeList")[i].coverImage.extraLarge
+                    }
                     sizes="33vw"
                     className="w-full object-cover"
                   />
@@ -58,16 +61,20 @@ export default function List({ username }: { username: string }) {
               {" "}
               <Link
                 href={
-                  value?.docs[0].get("animeList")[i + 3].link != undefined
-                    ? value?.docs[0].get("animeList")[i + 3].link
+                  value?.docs[0].get("animeList")[i + 3].siteUrl != undefined
+                    ? value?.docs[0].get("animeList")[i + 3].siteUrl
                     : ""
                 }
               >
-                {value?.docs[0].get("animeList")[i + 3].image != undefined ? (
+                {value?.docs[0].get("animeList")[i + 3].coverImage.extraLarge !=
+                "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i + 3].title}
+                    alt={value?.docs[0].get("animeList")[i + 3].title.english}
                     fill
-                    src={value?.docs[0].get("animeList")[i + 3].image}
+                    src={
+                      value?.docs[0].get("animeList")[i + 3].coverImage
+                        .extraLarge
+                    }
                     className="w-full object-cover"
                     sizes="33vw"
                   />
@@ -88,16 +95,20 @@ export default function List({ username }: { username: string }) {
               {" "}
               <Link
                 href={
-                  value?.docs[0].get("animeList")[i + 6].link != undefined
-                    ? value?.docs[0].get("animeList")[i + 6].link
+                  value?.docs[0].get("animeList")[i + 6].siteUrl != undefined
+                    ? value?.docs[0].get("animeList")[i + 6].siteUrl
                     : ""
                 }
               >
-                {value?.docs[0].get("animeList")[i + 6].image != undefined ? (
+                {value?.docs[0].get("animeList")[i + 6].coverImage.extraLarge !=
+                "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i + 6].title}
+                    alt={value?.docs[0].get("animeList")[i + 6].title.english}
                     fill
-                    src={value?.docs[0].get("animeList")[i + 6].image}
+                    src={
+                      value?.docs[0].get("animeList")[i + 6].coverImage
+                        .extraLarge
+                    }
                     className="w-full object-cover"
                     sizes="33vw"
                   />

@@ -3,11 +3,6 @@
 import { Updates } from "@/components/Updates";
 
 export default function Home() {
-  // const q = query(
-  //   collection(getFirestore(app), "userCollection"),
-  //   where(documentId(), "==", "yGvcNTpx77icy80vVJXt"),
-  // );
-
   return (
     <div className="my-5 w-full md:w-1/2">
       <h1 className="font-fira-sans mb-2 text-2xl font-bold">Updates</h1>

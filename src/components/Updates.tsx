@@ -4,10 +4,7 @@ import { app } from "@/firebase/config";
 import { collection, getFirestore, query, where } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  useCollection,
-  useCollectionOnce,
-} from "react-firebase-hooks/firestore";
+import { useCollectionOnce } from "react-firebase-hooks/firestore";
 
 export function Updates() {
   const q = query(collection(getFirestore(app), "updateCollection"));
@@ -67,9 +64,7 @@ export function UpdatesFromUser({ username }: { username: string }) {
     where("user", "==", username),
   );
 
-  const [value] = useCollection(q, {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
+  const [value] = useCollectionOnce(q, {});
 
   return (
     <>

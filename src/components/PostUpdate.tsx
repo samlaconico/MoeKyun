@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Search from "./Search";
-import { AnimeType, TitleType } from "@/utils/types";
+import { AnimeType } from "@/utils/types";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { auth, db } from "@/firebase/config";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ export default function PostUpdate() {
   const [entry, setEntry] = useState<AnimeType>();
   const [charCount, setCharCount] = useState<number>(0);
   const [progress, setProgress] = useState<string>("watching");
+  const [episode, setEpisode] = useState<number>(0);
   const [body, setBody] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function PostUpdate() {
         userID: auth.currentUser?.uid,
         body: body,
         date: Timestamp.now(),
+        episode: episode,
       })
         .then(() => {
           console.log("aljkshdlj");
@@ -38,9 +40,9 @@ export default function PostUpdate() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(entry);
-  // }, [entry]);
+  useEffect(() => {
+    console.log(entry?.episodes);
+  }, [entry]);
 
   return (
     <div className="font-fira-sans w-full py-10">
@@ -55,32 +57,39 @@ export default function PostUpdate() {
         }}
         className="flex flex-col space-y-2"
       >
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row place-items-end justify-between">
           <Search
-            callback={(
-              id: number,
-              title: TitleType,
-              image: string,
-              link: string,
-            ) => {
-              setEntry({
-                id: id,
-                title: title,
-                coverImage: { extraLarge: image },
-                siteUrl: link,
-              });
+            callback={(entry: AnimeType) => {
+              setEntry(entry);
             }}
             placeholder="Anime Title"
           />
-          <select
-            onChange={(e) => {
-              console.log(e.target.value);
-              setProgress(e.target.value);
-            }}
-          >
-            <option value="watching">Watching</option>
-            <option value="completed">Completed</option>
-          </select>
+          <div className="flex-row md:flex">
+            <div>
+              <span>Episode:</span>
+
+              <select
+                onChange={(e) => {
+                  setEpisode(Number(e.target.value));
+                }}
+              >
+                {[...Array(entry?.episodes)].map((v, i) => (
+                  <option value={i + 1} key={i + 1}>
+                    {(i + 1).toString()}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <select
+              onChange={(e) => {
+                console.log(e.target.value);
+                setProgress(e.target.value);
+              }}
+            >
+              <option value="watching">Watching</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
         </div>
         <textarea
           maxLength={100}

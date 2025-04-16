@@ -14,7 +14,7 @@ import { app, auth, db } from "@/firebase/config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { TitleType } from "@/utils/types";
+import { AnimeType } from "@/utils/types";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 export default function SettingsPanel({ user }: { user: string }) {
@@ -53,10 +53,10 @@ export default function SettingsPanel({ user }: { user: string }) {
           {[...Array(9)].map((v, i) => (
             <div key={i} className="overflow-hidden md:w-1/3">
               <Search
-                callback={(id, title, image, link) => {
-                  setNewListEntry(user, i, id, title, image, link);
+                callback={(entry) => {
+                  setNewListEntry(user, i, entry);
                 }}
-                placeholder={value?.docs[0].get("animeList")[i].title.romaji}
+                placeholder={value?.docs[0].get("animeList")[i].title.english}
               ></Search>
             </div>
           ))}
@@ -65,14 +65,7 @@ export default function SettingsPanel({ user }: { user: string }) {
     );
 }
 
-async function setNewListEntry(
-  user: string,
-  index: number,
-  id: number,
-  title: TitleType,
-  image: string,
-  link: string,
-) {
+async function setNewListEntry(user: string, index: number, entry: AnimeType) {
   const q = query(
     collection(getFirestore(app), "userCollection"),
     where("username", "==", user),
@@ -84,8 +77,10 @@ async function setNewListEntry(
     tempArray = doc.data().animeList;
   });
 
-  tempObject = { title: title, id: id, image: image, link: link };
+  tempObject = entry;
   tempArray[index] = tempObject;
 
-  await updateDoc(doc(db, "userCollection", user), { animeList: tempArray });
+  await updateDoc(doc(db, "userCollection", user), {
+    animeList: tempArray,
+  });
 }
