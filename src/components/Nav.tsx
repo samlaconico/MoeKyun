@@ -14,13 +14,14 @@ export default function Nav() {
   return (
     <nav className="font-fira-sans flex flex-row justify-between bg-neutral-800 px-5 py-3 md:px-10">
       <Link href="/">
-        <h1 className="my-auto text-4xl font-bold">MoeKyun</h1>
+        <h1 className="my-auto hidden text-4xl font-bold sm:block">MoeKyun</h1>
+        <h1 className="my-auto block text-4xl font-bold sm:hidden">MK</h1>
       </Link>
 
       {loading ? (
-        <Skeleton className="my-auto h-4 w-32" />
+        <Skeleton className="my-auto h-4 w-32 rounded-md bg-amber-300" />
       ) : (
-        <div className="inline-flex space-x-2">
+        <div className="inline-flex space-x-2 font-semibold">
           <Link href={`/${authState?.displayName}`} className="my-auto">
             <h1 className="my-auto hover:underline hover:shadow-white">
               {authState?.displayName}

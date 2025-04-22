@@ -22,7 +22,10 @@ export default function List({ username }: { username: string }) {
       <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
         {[...Array(3)].map((v, i) =>
           loading ? (
-            <Skeleton key={i} className="aspect-square w-1/3 bg-amber-300" />
+            <Skeleton
+              key={i}
+              className="aspect-square w-1/3 rounded-none bg-amber-300"
+            />
           ) : (
             <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
               <Link
@@ -36,7 +39,11 @@ export default function List({ username }: { username: string }) {
                 {value?.docs[0].get("animeList")[i].coverImage.extraLarge !=
                 "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i].title.english}
+                    alt={
+                      value?.docs[0].get("animeList")[i].title.english
+                        ? value?.docs[0].get("animeList")[i].title.english
+                        : value?.docs[0].get("animeList")[i].title.romaji
+                    }
                     fill
                     src={
                       value?.docs[0].get("animeList")[i].coverImage.extraLarge
@@ -55,7 +62,10 @@ export default function List({ username }: { username: string }) {
       <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
         {[...Array(3)].map((v, i) =>
           loading ? (
-            <Skeleton key={i} className="aspect-square w-1/3 bg-amber-300" />
+            <Skeleton
+              key={i}
+              className="aspect-square w-1/3 rounded-none bg-amber-300"
+            />
           ) : (
             <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
               {" "}
@@ -69,7 +79,11 @@ export default function List({ username }: { username: string }) {
                 {value?.docs[0].get("animeList")[i + 3].coverImage.extraLarge !=
                 "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i + 3].title.english}
+                    alt={
+                      value?.docs[0].get("animeList")[i + 3].title.english
+                        ? value?.docs[0].get("animeList")[i + 3].title.english
+                        : value?.docs[0].get("animeList")[i + 3].title.romaji
+                    }
                     fill
                     src={
                       value?.docs[0].get("animeList")[i + 3].coverImage
@@ -89,7 +103,10 @@ export default function List({ username }: { username: string }) {
       <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
         {[...Array(3)].map((v, i) =>
           loading ? (
-            <Skeleton key={i} className="aspect-square w-1/3 bg-amber-300" />
+            <Skeleton
+              key={i}
+              className="aspect-square w-1/3 rounded-none bg-amber-300"
+            />
           ) : (
             <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
               {" "}
@@ -103,7 +120,11 @@ export default function List({ username }: { username: string }) {
                 {value?.docs[0].get("animeList")[i + 6].coverImage.extraLarge !=
                 "" ? (
                   <Image
-                    alt={value?.docs[0].get("animeList")[i + 6].title.english}
+                    alt={
+                      value?.docs[0].get("animeList")[i + 6].title.english
+                        ? value?.docs[0].get("animeList")[i + 6].title.english
+                        : value?.docs[0].get("animeList")[i + 6].title.romaji
+                    }
                     fill
                     src={
                       value?.docs[0].get("animeList")[i + 6].coverImage

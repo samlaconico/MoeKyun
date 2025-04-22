@@ -5,7 +5,6 @@ import { collection, getFirestore, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
-import Image from "next/image";
 import Link from "next/link";
 import { Follow, Unfollow } from "@/utils/Follow";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -23,16 +22,20 @@ export default function ProfileHeader({ username }: { username: string }) {
 
   return (
     <motion.div className="relative my-10 flex w-auto flex-row items-end space-x-3">
-      <Image
-        alt="Profile Image"
-        width={100}
-        height={100}
-        src={
-          auth.currentUser?.photoURL
-            ? auth.currentUser?.photoURL
-            : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
-        }
-      />
+      {loading ? (
+        <Skeleton className="size-[100px] bg-amber-300" />
+      ) : (
+        <img
+          alt="Profile Image"
+          className="size-[100px]"
+          src={
+            value?.docs[0].get("profileImage")
+              ? value?.docs[0].get("profileImage")
+              : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
+          }
+        />
+      )}
+
       <div>
         {!loading ? (
           username != auth.currentUser?.displayName && auth.currentUser ? (
