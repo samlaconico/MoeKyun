@@ -1,7 +1,13 @@
 "use client";
 
 import { app } from "@/firebase/config";
-import { collection, getFirestore, query, where } from "firebase/firestore";
+import {
+  collection,
+  getFirestore,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useCollectionOnce } from "react-firebase-hooks/firestore";
@@ -9,7 +15,10 @@ import { motion } from "motion/react";
 import { Skeleton } from "./ui/skeleton";
 
 export function Updates() {
-  const q = query(collection(getFirestore(app), "updateCollection"));
+  const q = query(
+    collection(getFirestore(app), "updateCollection"),
+    orderBy("date", "desc"),
+  );
 
   const [value] = useCollectionOnce(q);
 
@@ -31,7 +40,7 @@ export function Updates() {
             <Link href={`/${object.user}`}>
               <h1 className="font-fira-sans hover:underline">{object.user}</h1>
             </Link>
-            <div className="flex h-42 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800">
+            <div className="flex h-38 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800">
               <div className="relative h-full w-32">
                 <Link href={object.entry.siteUrl}>
                   <Image
@@ -88,7 +97,7 @@ export function UpdatesFromUser({ username }: { username: string }) {
             return (
               <motion.div
                 key={index}
-                className="mb-5 flex h-42 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800"
+                className="mb-5 flex h-38 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800"
                 initial={{ scale: 1 }}
                 whileHover={{ scale: 1.05 }}
               >
