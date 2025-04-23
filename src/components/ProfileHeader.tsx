@@ -21,19 +21,27 @@ export default function ProfileHeader({ username }: { username: string }) {
   });
 
   return (
-    <motion.div className="relative my-10 flex w-auto flex-row items-end space-x-3">
+    <motion.div className="relative my-10 flex w-auto flex-col space-y-3 space-x-3 md:flex-row md:items-end md:space-y-0">
       {loading ? (
-        <Skeleton className="size-[100px] bg-amber-300" />
+        <Skeleton className="size-[150px] bg-amber-300" />
       ) : (
-        <img
-          alt="Profile Image"
-          className="size-[100px]"
-          src={
+        <Link
+          href={
             value?.docs[0].get("profileImage")
               ? value?.docs[0].get("profileImage")
               : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
           }
-        />
+        >
+          <img
+            alt="Profile Image"
+            className="size-[150px] rounded-sm border-2 border-neutral-200"
+            src={
+              value?.docs[0].get("profileImage")
+                ? value?.docs[0].get("profileImage")
+                : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
+            }
+          />
+        </Link>
       )}
 
       <div>

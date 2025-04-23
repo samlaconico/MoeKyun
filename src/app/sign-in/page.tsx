@@ -33,11 +33,6 @@ export default function SignIn() {
         credentials.email,
         credentials.password,
       );
-
-      //session storage -- might remove later
-      if (res != undefined) {
-        sessionStorage.setItem("signedin", "true");
-      }
     } catch (e) {
       console.log(e);
     }

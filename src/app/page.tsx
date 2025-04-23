@@ -1,14 +1,26 @@
 "use client";
 
-import { Updates } from "@/components/Updates";
+import { auth } from "@/firebase/config";
+import { redirect } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Home() {
-  return (
-    <div className="my-5 w-full md:w-1/2">
-      <h1 className="font-fira-sans mb-2 text-2xl font-bold">Updates</h1>
-      <Updates />
-    </div>
-  );
+  const [authState, loading] = useAuthState(auth);
+
+  if (!loading) {
+    if (!authState) {
+      redirect("/sign-in");
+    } else {
+      redirect(`/${authState?.displayName}`);
+    }
+  }
+
+  // return (
+  //   <div className="my-5 w-full md:w-1/2">
+  //     <h1 className="font-fira-sans mb-2 text-2xl font-bold">Updates</h1>
+  //     <Updates />
+  //   </div>
+  // );
 }
 
 // function WelcomePageNotSignedIn() {

@@ -27,7 +27,12 @@ export default function List({ username }: { username: string }) {
               className="aspect-square w-1/3 rounded-none bg-amber-300"
             />
           ) : (
-            <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
+            <motion.div
+              key={i}
+              className="relative aspect-square w-1/3 bg-amber-300"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+            >
               <Link
                 href={
                   value?.docs[0].get("animeList")[i].siteUrl != undefined
@@ -55,7 +60,7 @@ export default function List({ username }: { username: string }) {
                   ""
                 )}
               </Link>
-            </div>
+            </motion.div>
           ),
         )}
       </div>
@@ -67,7 +72,12 @@ export default function List({ username }: { username: string }) {
               className="aspect-square w-1/3 rounded-none bg-amber-300"
             />
           ) : (
-            <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
+            <motion.div
+              key={i}
+              className="relative aspect-square w-1/3 bg-amber-300"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+            >
               {" "}
               <Link
                 href={
@@ -96,7 +106,7 @@ export default function List({ username }: { username: string }) {
                   ""
                 )}
               </Link>
-            </div>
+            </motion.div>
           ),
         )}
       </div>
@@ -108,7 +118,12 @@ export default function List({ username }: { username: string }) {
               className="aspect-square w-1/3 rounded-none bg-amber-300"
             />
           ) : (
-            <div key={i} className="relative aspect-square w-1/3 bg-amber-300">
+            <motion.div
+              key={i}
+              className="relative aspect-square w-1/3 bg-amber-300"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05 }}
+            >
               {" "}
               <Link
                 href={
@@ -137,7 +152,7 @@ export default function List({ username }: { username: string }) {
                   ""
                 )}
               </Link>
-            </div>
+            </motion.div>
           ),
         )}
       </div>

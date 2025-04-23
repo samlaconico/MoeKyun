@@ -17,7 +17,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { AnimeType } from "@/utils/types";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { FiArrowLeft } from "react-icons/fi";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 export default function SettingsPanel({ user }: { user: string }) {
   const router = useRouter();
@@ -75,12 +80,6 @@ export default function SettingsPanel({ user }: { user: string }) {
               imageUpload(e, authState?.displayName);
             }}
           />
-          <button
-            type="submit"
-            className="mx-2 rounded-lg bg-neutral-800 px-2 hover:cursor-pointer hover:bg-neutral-700"
-          >
-            Upload
-          </button>
         </form>
       </div>
     );
@@ -90,17 +89,31 @@ async function imageUpload(
   e: ChangeEvent<HTMLInputElement>,
   user: string | undefined | null,
 ) {
-  if (user != undefined && user != null) {
+  if (user != undefined && user != null && e.target.files != undefined) {
     if (e.target.files != null) {
       const fileRef = ref(sg, e.target.files[0].name);
       const uploadTask = uploadBytesResumable(fileRef, e.target.files[0]);
 
-      uploadTask.on("state_changed", async () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          await updateDoc(doc(db, "userCollection", user), {
-            profileImage: downloadURL,
-          });
-        });
+      const q = query(
+        collection(getFirestore(app), "userCollection"),
+        where("username", "==", user),
+      );
+      const docc = await getDocs(q);
+      const deleteRef = ref(sg, docc.docs[0].get("profileImage"));
+
+      deleteObject(deleteRef).then(() => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              updateDoc(doc(db, "userCollection", user), {
+                profileImage: downloadURL,
+              });
+            });
+          },
+        );
       });
     }
   }
