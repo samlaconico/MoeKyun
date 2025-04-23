@@ -104,8 +104,12 @@ async function imageUpload(
       deleteObject(deleteRef).then(() => {
         uploadTask.on(
           "state_changed",
-          (snapshot) => {},
-          (error) => {},
+          (snapshot) => {
+            console.log(snapshot);
+          },
+          (error) => {
+            console.log(error);
+          },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               updateDoc(doc(db, "userCollection", user), {

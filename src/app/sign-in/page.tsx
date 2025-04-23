@@ -33,6 +33,8 @@ export default function SignIn() {
         credentials.email,
         credentials.password,
       );
+
+      console.log(res);
     } catch (e) {
       console.log(e);
     }
