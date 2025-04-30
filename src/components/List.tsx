@@ -18,8 +18,8 @@ export default function List({ username }: { username: string }) {
 
   return (
     <motion.div className="w-full">
-      <h1 className="font-fira-sans text-3xl font-semibold">3x3</h1>
-      <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
+      <h1 className="font-fira-sans mb-2 text-3xl font-semibold">3x3</h1>
+      <div className="mb-2 flex flex-row space-x-2">
         {[...Array(3)].map((v, i) =>
           loading ? (
             <Skeleton
@@ -29,7 +29,7 @@ export default function List({ username }: { username: string }) {
           ) : (
             <motion.div
               key={i}
-              className="relative aspect-square w-1/3 bg-amber-300"
+              className="relative aspect-square w-1/3 overflow-hidden rounded-sm bg-amber-300"
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.05 }}
             >
@@ -64,7 +64,7 @@ export default function List({ username }: { username: string }) {
           ),
         )}
       </div>
-      <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
+      <div className="mb-2 flex flex-row space-x-2">
         {[...Array(3)].map((v, i) =>
           loading ? (
             <Skeleton
@@ -74,7 +74,7 @@ export default function List({ username }: { username: string }) {
           ) : (
             <motion.div
               key={i}
-              className="relative aspect-square w-1/3 bg-amber-300"
+              className="relative aspect-square w-1/3 overflow-hidden rounded-sm bg-amber-300"
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.05 }}
             >
@@ -110,7 +110,7 @@ export default function List({ username }: { username: string }) {
           ),
         )}
       </div>
-      <div className="mb-2 flex flex-row space-x-2 overflow-hidden">
+      <div className="mb-2 flex flex-row space-x-2">
         {[...Array(3)].map((v, i) =>
           loading ? (
             <Skeleton
@@ -120,7 +120,7 @@ export default function List({ username }: { username: string }) {
           ) : (
             <motion.div
               key={i}
-              className="relative aspect-square w-1/3 bg-amber-300"
+              className="relative aspect-square w-1/3 overflow-hidden rounded-sm bg-amber-300"
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.05 }}
             >

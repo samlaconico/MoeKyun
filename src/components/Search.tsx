@@ -134,7 +134,7 @@ export default function Search({
             setSearchInput(() => e.target.value);
           }}
           value={searchInput}
-          className="mb-1 w-full rounded-sm border-neutral-800 bg-neutral-800 px-2 text-white focus:outline-0"
+          className="mb-1 w-full rounded-sm border-neutral-800 bg-neutral-900 px-2 text-white focus:outline-0"
         ></input>
         {focused ? (
           <div className="absolute w-1/2">

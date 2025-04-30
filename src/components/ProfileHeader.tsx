@@ -29,16 +29,16 @@ export default function ProfileHeader({ username }: { username: string }) {
           href={
             value?.docs[0].get("profileImage")
               ? value?.docs[0].get("profileImage")
-              : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
+              : ""
           }
         >
           <img
             alt="Profile Image"
-            className="size-[150px] rounded-sm border-2 border-neutral-200"
+            className="size-[150px] rounded-sm border-2 border-neutral-200 object-cover"
             src={
               value?.docs[0].get("profileImage")
                 ? value?.docs[0].get("profileImage")
-                : "https://yt3.ggpht.com/yti/ANjgQV-0bO4_a79iFihiLxp_MPItweNXG9Fa5YvQ2BG52EcmVg=s108-c-k-c0x00ffffff-no-rj"
+                : "/images/defaultavi.jpg"
             }
           />
         </Link>

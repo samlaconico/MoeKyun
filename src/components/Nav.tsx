@@ -1,14 +1,14 @@
 "use client";
 
 import { auth } from "@/firebase/config";
-import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import { Skeleton } from "./ui/skeleton";
 
 export default function Nav() {
   const [authState, loading] = useAuthState(auth);
+  const [signOut] = useSignOut(auth);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -28,7 +28,7 @@ export default function Nav() {
           <div className="inline-flex space-x-2 font-semibold">
             <Link
               href={`/${authState?.displayName}`}
-              className={`my-auto border-amber-300 ${pathname == `/${authState?.displayName}` ? `border-b-2` : ``}`}
+              className={`my-auto border-amber-300 ${authState?.displayName != undefined ? (pathname.includes(authState?.displayName) ? `rounded-lg bg-amber-300 px-2 text-neutral-700` : ``) : ``}`}
             >
               <h1 className="my-auto hover:underline hover:shadow-white">
                 {authState?.displayName}
@@ -37,7 +37,7 @@ export default function Nav() {
             {authState ? (
               <Link href={`/update`} className="my-auto">
                 <h1
-                  className={`my-auto border-amber-300 hover:underline hover:shadow-white ${pathname == `/update` ? `border-b-2` : ``}`}
+                  className={`my-auto border-amber-300 hover:underline hover:shadow-white ${pathname == `/update` ? `rounded-lg bg-amber-300 px-2 text-neutral-700` : ``}`}
                 >
                   Add Update
                 </h1>
@@ -47,11 +47,11 @@ export default function Nav() {
             )}
 
             <button
-              className="cursor-pointer hover:underline"
-              onClick={() => {
+              className={`my-auto cursor-pointer hover:underline ${pathname == `/sign-in` ? `rounded-lg bg-amber-300 px-2 text-neutral-700` : ``}`}
+              onClick={async () => {
                 if (authState) {
-                  signOut(auth);
-                  router.refresh();
+                  const signedOut = await signOut();
+                  if (signedOut) router.refresh();
                 } else {
                   router.push("/sign-in");
                 }
@@ -61,7 +61,10 @@ export default function Nav() {
             </button>
 
             {!authState ? (
-              <Link href={"/register"} className="p-2 hover:underline">
+              <Link
+                href={"/register"}
+                className={`my-auto cursor-pointer hover:underline ${pathname == `/register` ? `rounded-lg bg-amber-300 px-2 text-neutral-700` : ``}`}
+              >
                 Register
               </Link>
             ) : (

@@ -47,7 +47,7 @@ function Page({ username }: { username: string }) {
       <div className="place-items-start space-y-5 gap-x-6 gap-y-10 md:grid md:grid-cols-2">
         <List username={username} />
         <div className="mx-auto flex w-full flex-col">
-          <h1 className="font-fira-sans text-3xl font-semibold">
+          <h1 className="font-fira-sans mb-2 text-3xl font-semibold">
             Recent Updates
           </h1>
           <UpdatesFromUser username={username} />

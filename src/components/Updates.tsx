@@ -88,50 +88,57 @@ export function UpdatesFromUser({ username }: { username: string }) {
         ? [...Array(3)].map((v, i) => (
             <Skeleton key={i} className="mb-3 h-42 w-full bg-amber-300" />
           ))
-        : value?.docs.splice(0, 5).map((data, index) => {
-            //console.log(data.data());
-            const object = JSON.parse(JSON.stringify(data.data()));
-            const time = new Date(
-              object.date.seconds * 1000 + object.date.nanoseconds / 1000000,
-            );
-            return (
-              <motion.div
-                key={index}
-                className="mb-5 flex h-38 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800"
-                initial={{ scale: 1 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="relative h-full w-32">
-                  <Link href={object.entry.siteUrl}>
-                    <Image
-                      src={object.entry.coverImage.extraLarge}
-                      fill
-                      alt={object.entry.title.romaji}
-                      className="object-cover"
-                    />
-                  </Link>
-                </div>
-                <div className="w-full justify-between pt-1 pr-2 pl-1">
-                  <div className="mb-2">
-                    <div className="flex flex-row justify-between">
-                      <Link href={object.entry.siteUrl}>
-                        <h1 className="font-fira-sans text-xl font-bold">
-                          {object.entry.title.english}
-                        </h1>
-                      </Link>
-                      <div className="text-right">
-                        <h2 className="font-fira-sans pt-1 text-sm">
-                          {time.toLocaleDateString()}
-                        </h2>
-                        <h1 className=" ">Episode {object.episode}</h1>
+        : value?.docs
+            .toReversed()
+            .splice(0, 5)
+            .map((data, index) => {
+              //console.log(data.data());
+              const object = JSON.parse(JSON.stringify(data.data()));
+              const time = new Date(
+                object.date.seconds * 1000 + object.date.nanoseconds / 1000000,
+              );
+              return (
+                <motion.div
+                  key={index}
+                  className="mb-5 flex h-38 w-full space-x-1 overflow-hidden rounded-sm bg-neutral-800"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div className="relative h-full w-32">
+                    <Link href={object.entry.siteUrl}>
+                      <Image
+                        src={object.entry.coverImage.extraLarge}
+                        fill
+                        alt={object.entry.title.romaji}
+                        className="object-cover"
+                      />
+                    </Link>
+                  </div>
+                  <div className="w-full justify-between py-1 pr-2 pl-1">
+                    <div className="mb-2">
+                      <div className="flex flex-row justify-between">
+                        <Link href={object.entry.siteUrl}>
+                          <h1 className="font-fira-sans text-xl font-bold">
+                            {object.entry.title.english}
+                          </h1>
+                        </Link>
+                        <div className="text-right">
+                          <h2 className="font-fira-sans pt-1 text-sm">
+                            {time.toLocaleDateString()}
+                          </h2>
+                          <h1 className="font-fira text-sm">
+                            Episode {object.episode}
+                          </h1>
+                        </div>
                       </div>
                     </div>
+                    <p className="font-fira-sans text-ellipsis">
+                      {object.body}
+                    </p>
                   </div>
-                  <p className="font-fira-sans">{object.body}</p>
-                </div>
-              </motion.div>
-            );
-          })}
+                </motion.div>
+              );
+            })}
     </>
   );
 }
