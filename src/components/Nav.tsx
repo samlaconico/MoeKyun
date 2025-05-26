@@ -11,7 +11,7 @@ export default function Nav() {
   const [signOut] = useSignOut(auth);
   const router = useRouter();
   const pathname = usePathname();
-
+  
   return (
     <nav className="bg-neutral-800 px-5 py-3 md:px-10">
       <div className="font-fira-sans container mx-auto flex flex-row justify-between">
