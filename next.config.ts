@@ -8,14 +8,15 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "s4.anilist.co",
-        port: "",
-        search: "",
       },
       {
         protocol: "https",
         hostname: "yt3.ggpht.com",
-        port: "",
-        search: "",
+      },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/v0/b/anime-list-c3714.firebasestorage.app/o/**",
       },
     ],
   },

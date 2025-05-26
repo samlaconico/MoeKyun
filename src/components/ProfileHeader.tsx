@@ -8,6 +8,7 @@ import { Skeleton } from "./ui/skeleton";
 import Link from "next/link";
 import { Follow, Unfollow } from "@/utils/Follow";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Image from "next/image";
 
 export default function ProfileHeader({ username }: { username: string }) {
   const q = query(
@@ -32,11 +33,13 @@ export default function ProfileHeader({ username }: { username: string }) {
               : ""
           }
         >
-          <img
+          <Image
+          width={500}
+          height={500}
             alt="Profile Image"
             className="size-[150px] rounded-sm border-2 border-neutral-200 object-cover"
             src={
-              value?.docs[0].get("profileImage")
+value?.docs[0].get("profileImage")
                 ? value?.docs[0].get("profileImage")
                 : "/images/defaultavi.jpg"
             }

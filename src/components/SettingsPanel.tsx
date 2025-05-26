@@ -46,10 +46,10 @@ export default function SettingsPanel({ user }: { user: string }) {
     user: string | undefined | null,
   ) => {
     if (user != undefined && user != null && e.target.files != undefined) {
-      if (e.target.files != null) {
+      if (e.target.files != null && e.target.files[0].type.includes("image")) {
         const fileRef = ref(sg, e.target.files[0].name);
         const uploadTask = uploadBytesResumable(fileRef, e.target.files[0]);
-
+        
         const q = query(
           collection(getFirestore(app), "userCollection"),
           where("username", "==", user),
@@ -80,7 +80,11 @@ export default function SettingsPanel({ user }: { user: string }) {
             },
           );
         });
+      } else {
+        setImageUploadState("Error, please make sure to upload an image file ")
       }
+    } else {
+      setImageUploadState("Error, try uploading again");
     }
   };
 
@@ -138,6 +142,7 @@ export default function SettingsPanel({ user }: { user: string }) {
             <form className="">
               <input
                 type="file"
+                accept="image/png, image/jpg"
                 className="text-md w-1/2 rounded-md bg-neutral-900 px-2 hover:bg-neutral-700"
                 onChange={(e) => {
                   imageUpload(e, authState?.displayName);
